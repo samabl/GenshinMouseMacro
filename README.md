@@ -45,7 +45,8 @@ python GenshinMacro.py
 ### 通用
 
 - 按住`x2`为循环点击`F`键，可用于自动交互和对话。
-- 点击`x1`为自动登龙，目前支持全部`单手剑` `双手剑`和`长柄武器`角色和`鹿野院平藏`。
+- 点击`x1`为自动登龙，目前仅支持作者box中的`单手剑` `双手剑`和`长柄武器`角色和`鹿野院平藏`
+  ，其他角色请参考[注意事项](#注意事项)自行调试。
   > [特殊角色](#特殊角色)不支持通用登龙
 
   > 登龙只适用于60帧及以下，更高帧率请自行修改`character.json`中的延时，帧率越高延时需要越小
@@ -70,7 +71,7 @@ python GenshinMacro.py
 
 ## 注意事项
 
-- 自动登龙延时可能需要根据情况微调：
+- 自动登龙延时可能需要根据情况微调，延时为0代表不登龙：
     1. 直接修改`character.json`，单位为毫秒。
     2. 也可修改`GenshinMacro.py`中的`debug = True`和`port`
        ，使用[tcp调试工具](https://play.google.com/store/apps/details?id=com.hardcodedjoy.tcpclient&hl=en_US&pli=1)
