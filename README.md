@@ -1,3 +1,5 @@
+某二次元游戏自动化脚本，作者是新手能力有限，目前只有这些功能，想添加新功能请issue，欢迎大佬PR，觉得好用的话请给个star喵~
+
 # 目录
 
 <!-- TOC -->
@@ -65,7 +67,9 @@ pip install -r requirements.txt
 
 - 自动登龙延时可能需要根据情况微调
     1. 直接修改`character.json`，单位为毫秒
-    2. 也可修改`genshin_macro.py`中的`debug = True`和`port`，使用[tcp调试工具](https://play.google.com/store/apps/details?id=com.hardcodedjoy.tcpclient&hl=en_US&pli=1)连接调整延时，消息格式为`<延时(毫秒)>s`
+    2. 也可修改`genshin_macro.py`中的`debug = True`和`port`
+       ，使用[tcp调试工具](https://play.google.com/store/apps/details?id=com.hardcodedjoy.tcpclient&hl=en_US&pli=1)
+       连接调整延时，消息格式为`<延时(毫秒)>s`
        ，消息接收后自动保存
 - 该脚本需要有鼠标侧键，如果没有鼠标侧键请自行修改`Callback.py`
 - 游戏分辨率需设置为`16:10`或`16:9`，否则会报错
