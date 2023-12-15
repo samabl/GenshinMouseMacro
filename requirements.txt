@@ -1,0 +1,12 @@
+numpy
+Pillow
+
+pynput
+pygetwindow
+pyautogui
+
+psutil
+pywin32
+
+onnxruntime
+cnocr
