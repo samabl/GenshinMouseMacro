@@ -74,8 +74,7 @@ python GenshinMacro.py
 - 自动登龙延时可能需要根据情况微调，延时为0代表不登龙：
     1. 直接修改`character.json`，单位为毫秒。
     2. 也可修改`GenshinMacro.py`中的`debug = True`和`port`
-       ，使用[tcp调试工具](https://play.google.com/store/apps/details?id=com.hardcodedjoy.tcpclient&hl=en_US&pli=1)
-       连接调整延时，消息格式为`<延时(毫秒)>s`
+       ，使用[tcp调试工具](https://play.google.com/store/apps/details?id=com.hardcodedjoy.tcpclient&hl=en_US&pli=1)连接调整延时，消息格式为`<延时(毫秒)>s`
        ，消息接收后自动保存。
 - 该脚本需要有鼠标侧键，如果没有鼠标侧键请自行修改`Callback.py`。
 - 游戏分辨率需设置为`16:10`或`16:9`，否则会报错。

@@ -54,4 +54,4 @@ while True:
     if not psutil.pid_exists(pid):
         print('game end')
         break
-    time.sleep(2)
+    time.sleep(1)
