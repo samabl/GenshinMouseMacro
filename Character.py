@@ -101,8 +101,8 @@ class Character:
             base_crop = self.crop_table[self.mode][aspect_ratio]
             crop = base_crop + [aspect_ratio]
             img = Screenshot.Screenshot.screenshot(crop)
-        with open('test.png', 'wb') as f:
-            img.save(f)
+        # with open('test.png', 'wb') as f:
+        #     img.save(f)
         img = np.array(img)
         self.current_character = Ocr.Ocr(self.ocr, img)
 
