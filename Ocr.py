@@ -16,11 +16,9 @@ def _is_chinese(uchar):
 def _extract_chinese(string):
     s = ''
     for i in string:
-        if i in [' ', '·', '丨', '丶', '丿', '乀', '乁', '乚']:
-            continue
         if _is_chinese(i):
             s += i
-    if s[-1] == '心':
+    if s and s[-1] in [' ', '·', '丨', '丶', '丿', '乀', '乁', '乚', '心', '寺']:
         s = s[:-1]
     return s
 

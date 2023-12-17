@@ -11,7 +11,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 import Callback
 import EditReg
 
-debug = True
+debug = False
 port = 8080
 launch_game = True
 game_path = 'D:/Games/Genshin Impact/Genshin Impact Game/YuanShen.exe'
