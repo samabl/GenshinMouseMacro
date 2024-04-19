@@ -10,9 +10,12 @@ class Screenshot:
         return (window.width, window.height) == (screen_width, screen_height)
 
     @staticmethod
-    def get_window_region(window):
+    def get_window_region(window, title='原神'):
         # 去除边框
-        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Software\\miHoYo\\原神")
+        if title in ['原神', 'Genshin Impact']:
+            key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Software\\miHoYo\\{}".format(title))
+        else:
+            raise Exception('不支持的游戏')
         width, _ = winreg.QueryValueEx(key, "Screenmanager Resolution Width_h182942802")
         height, _ = winreg.QueryValueEx(key, "Screenmanager Resolution Height_h2627697771")
         other_border = (window.width - width) // 2
@@ -37,9 +40,9 @@ class Screenshot:
         window = Screenshot.get_window(title)
         if window:
             if crop == (0, 0, 0, 0):
-                screenshot_pos = Screenshot.get_window_region(window)
+                screenshot_pos = Screenshot.get_window_region(window, title)
             else:
-                left, top, width, height = Screenshot.get_window_region(window)
+                left, top, width, height = Screenshot.get_window_region(window, title)
                 screenshot_pos = int(left + width * crop[0]), int(top + height * crop[1]), int(width * crop[2]), int(
                     height * crop[3])
             screenshot = pyautogui.screenshot(region=screenshot_pos)
@@ -48,8 +51,11 @@ class Screenshot:
         return False
 
     @staticmethod
-    def get_aspect_ratio():
-        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Software\\miHoYo\\原神")
+    def get_aspect_ratio(title='原神'):
+        if title in ['原神', 'Genshin Impact']:
+            key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, "Software\\miHoYo\\{}".format(title))
+        else:
+            raise Exception('不支持的游戏')
         height, _ = winreg.QueryValueEx(key, "Screenmanager Resolution Height_h2627697771")
         width, _ = winreg.QueryValueEx(key, "Screenmanager Resolution Width_h182942802")
         if width / height == 16 / 10:
@@ -60,11 +66,10 @@ class Screenshot:
             return 'other'
 
     @staticmethod
-    def screenshot(crop):
-        img, _ = Screenshot.take_screenshot('原神')
+    def screenshot(crop, title='原神'):
+        img, _ = Screenshot.take_screenshot(title)
         width, height = img.size
-
-        aspect_ratio = crop[4]
+        aspect_ratio = Screenshot.get_aspect_ratio(title)
         if aspect_ratio == '16:10':
             img = img.crop((width * crop[0] / 2560, height * crop[1] / 1600, width * crop[2] / 2560,
                             height * crop[3] / 1600))

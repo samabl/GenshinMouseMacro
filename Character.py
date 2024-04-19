@@ -25,6 +25,7 @@ def image_contrast(img1, img2):
 
 class Character:
     def __init__(self, config_path='character.json'):
+        self.title = '原神'
         self.ocr = Ocr.init_ocr()
         self.config_path = config_path
         self.config = self._get_config()
@@ -40,8 +41,11 @@ class Character:
                          'start': 0.0}
         self.mode = 'single'
         self.special_mode = {
+            '那维莱特': None,
             '甘雨': 0,
-            '胡桃': 0
+            '胡桃': 0,
+            '五郎': None,
+            '菲谢尔': None
         }
 
         self.crop_table = {
@@ -76,40 +80,42 @@ class Character:
         if os.stat(self.config_path).st_mtime != self._config_mtime:
             with open(self.config_path, 'r', encoding='gbk') as f:
                 self.config = json.load(f)
+                self._config_mtime = os.stat(self.config_path).st_mtime
+                self.all_characters = list(self.config['common'].keys())
+                self.special_characters = list(self.config['special'].keys())
+            print('config updated')
 
     def save_config(self):
         with open(self.config_path, 'w') as f:
             json.dump(self.config, f, indent=4, ensure_ascii=False)
 
     def get_current_character(self):
-        aspect_ratio = Screenshot.Screenshot.get_aspect_ratio()
-        if aspect_ratio == 'other':
-            raise Exception('不支持的长宽比，请设置为16:10或16:9')
+        aspect_ratio = Screenshot.Screenshot.get_aspect_ratio(self.title)
         if self.mode == 'single':
             base_crop = self.crop_table['single'][aspect_ratio]
             step = 128
             crop = [base_crop[0], base_crop[1] + step * (self.index - 1), base_crop[2],
-                    base_crop[3] + step * (self.index - 1)] + [aspect_ratio]
-            img = Screenshot.Screenshot.screenshot(crop)
+                    base_crop[3] + step * (self.index - 1)]
+            img = Screenshot.Screenshot.screenshot(crop, self.title)
         elif self.mode == 'double':
             base_crop = self.crop_table['double'][aspect_ratio]
             step = 120
             crop = [base_crop[0], base_crop[1] + step * (self.index - 1), base_crop[2],
-                    base_crop[3] + step * (self.index - 1)] + [aspect_ratio]
-            img = Screenshot.Screenshot.screenshot(crop)
+                    base_crop[3] + step * (self.index - 1)]
+            img = Screenshot.Screenshot.screenshot(crop, self.title)
         else:
             base_crop = self.crop_table[self.mode][aspect_ratio]
-            crop = base_crop + [aspect_ratio]
-            img = Screenshot.Screenshot.screenshot(crop)
+            crop = base_crop
+            img = Screenshot.Screenshot.screenshot(crop, self.title)
         # with open('test.png', 'wb') as f:
         #     img.save(f)
         img = np.array(img)
         self.current_character = Ocr.Ocr(self.ocr, img)
 
     def is_burst(self):
-        aspect_ratio = Screenshot.Screenshot.get_aspect_ratio()
-        crop = self.crop_table['burst'][aspect_ratio] + [aspect_ratio]
-        test = Screenshot.Screenshot.screenshot(crop)
+        aspect_ratio = Screenshot.Screenshot.get_aspect_ratio(self.title)
+        crop = self.crop_table['burst'][aspect_ratio]
+        test = Screenshot.Screenshot.screenshot(crop, self.title)
         with open('burst/{}_test.png'.format(self.current_character), 'wb') as f:
             test.save(f)
         test = 'burst/{}_test.png'.format(self.current_character)

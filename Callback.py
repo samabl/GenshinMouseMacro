@@ -10,7 +10,7 @@ from MouseKeyboard import mouse, keyboard
 
 _x1_pressed = False
 _x2_pressed = False
-_Character = Character.Character()
+Character = Character.Character()
 
 
 def tcp_server(port=8080):
@@ -41,13 +41,13 @@ def tcp_server(port=8080):
                     break
                 delay_time, is_save = cut(data.decode('utf-8'))
                 if is_save in ['s', 'save']:
-                    if _Character.bianshen['flag']:
-                        _Character.config['special'][_Character.current_character]['delay'] = delay_time
+                    if Character.bianshen['flag']:
+                        Character.config['special'][Character.current_character]['delay'] = delay_time
                     else:
-                        _Character.config['common'][_Character.current_character] = delay_time
+                        Character.config['common'][Character.current_character] = delay_time
 
-                    _Character.save_config()
-                    print('save {} delay: {}'.format(_Character.current_character, delay_time))
+                    Character.save_config()
+                    print('save {} delay: {}'.format(Character.current_character, delay_time))
 
         except Exception:
             server.close()
@@ -58,7 +58,11 @@ def tcp_server(port=8080):
 
 def on_press(key):
     global _mode, _last_index
-    if gw.getActiveWindow().title == '原神':
+    try:
+        title = gw.getActiveWindow().title
+    except AttributeError:
+        return
+    if title == Character.title:
 
         key = str(key)
         if len(key) == 3:
@@ -66,39 +70,39 @@ def on_press(key):
 
         if '1' <= key <= '4':
             if mouse.isPressed('x2'):
-                _Character.mode = ['single', 'double', 'three', 'four'][int(key) - 1]
-                print('模式: {}'.format(_Character.mode))
+                Character.mode = ['single', 'double', 'three', 'four'][int(key) - 1]
+                print('模式: {}'.format(Character.mode))
             else:
-                if _Character.mode == 'single':
-                    _Character.index = int(key)
-                    _Character.get_current_character()
+                if Character.mode == 'single':
+                    Character.index = int(key)
+                    Character.get_current_character()
                     _last_index = key
-                elif _Character.mode == 'double':
+                elif Character.mode == 'double':
                     if key in '12':
-                        _Character.index = int(key)
-                        _Character.get_current_character()
+                        Character.index = int(key)
+                        Character.get_current_character()
                         _last_index = key
                 else:
                     if key == '1':
-                        _Character.index = 1
-                        _Character.get_current_character()
-                if _Character.current_character not in _Character.all_characters:
+                        Character.index = 1
+                        Character.get_current_character()
+                if Character.current_character not in Character.all_characters:
                     time.sleep(0.1)
-                    _Character.get_current_character()
-                if _Character.current_character != _Character.bianshen['character']:
-                    _Character.bianshen = {'character': '',
-                                           'flag': False,
-                                           'duration': 0,
-                                           'start': 0.0}
-                print(_Character.current_character)
+                    Character.get_current_character()
+                if Character.current_character != Character.bianshen['character']:
+                    Character.bianshen = {'character': '',
+                                          'flag': False,
+                                          'duration': 0,
+                                          'start': 0.0}
+                print(Character.current_character)
 
         if key == 'q':
-            if _Character.current_character in _Character.special_characters:
-                if _Character.is_burst() and not _Character.bianshen['flag']:
-                    _Character.bianshen = {
-                        'character': _Character.current_character,
+            if Character.current_character in Character.special_characters:
+                if Character.is_burst() and not Character.bianshen['flag']:
+                    Character.bianshen = {
+                        'character': Character.current_character,
                         'flag': True,
-                        'duration': _Character.config['special'][_Character.current_character]['duration'],
+                        'duration': Character.config['special'][Character.current_character]['duration'],
                         'start': time.time()
                     }
 
@@ -121,48 +125,48 @@ def do_while_pressed(device, key, func, delay=0, *args):
 
 
 def x1_callback():
-    if _Character.current_character not in _Character.all_characters:
-        _Character.get_current_character()
-    # print(_Character.current_character)
-    if _Character.current_character not in _Character.all_characters:
+    if Character.current_character not in Character.all_characters:
+        Character.get_current_character()
+    # print(Character.current_character)
+    if Character.current_character not in Character.all_characters:
         return
 
-    if _Character.current_character in ['胡桃', '那维莱特', '甘雨']:
-        do_while_pressed('mouse', 'x1', _Character.current_character, 0,
-                         _Character.special_mode[
-                             _Character.current_character] if _Character.current_character in _Character.special_mode.keys() else None)
-        print(_Character.current_character)
+    if Character.current_character in Character.special_mode.keys():
+        do_while_pressed('mouse', 'x1', Character.current_character, 0,
+                         Character.special_mode[
+                             Character.current_character])
+        print(Character.current_character)
 
     else:
         if mouse.isLongPressed('x1', 0.2, True):
             return
-        if _Character.bianshen['flag'] and time.time() - _Character.bianshen['start'] > _Character.bianshen['duration']:
-            _Character.bianshen = {'character': '',
-                                   'flag': False,
-                                   'duration': 0,
-                                   'start': 0.0}
-        _Character.update_config()
-        if _Character.bianshen['flag']:
-            Macro.登龙(_Character.config['special'][_Character.current_character]['delay'])
-            print('{}  {}'.format(_Character.current_character,
-                                  _Character.config['special'][_Character.current_character]['delay']))
+        if Character.bianshen['flag'] and time.time() - Character.bianshen['start'] > Character.bianshen['duration']:
+            Character.bianshen = {'character': '',
+                                  'flag': False,
+                                  'duration': 0,
+                                  'start': 0.0}
+        Character.update_config()
+        if Character.bianshen['flag']:
+            Macro.登龙(Character.config['special'][Character.current_character]['delay'])
+            print('{}  {}'.format(Character.current_character,
+                                  Character.config['special'][Character.current_character]['delay']))
         else:
-            Macro.登龙(_Character.config['common'][_Character.current_character])
-            print('{}  {}'.format(_Character.current_character,
-                                  _Character.config['common'][_Character.current_character]))
+            Macro.登龙(Character.config['common'][Character.current_character])
+            print('{}  {}'.format(Character.current_character,
+                                  Character.config['common'][Character.current_character]))
 
 
 def x2_callback():
-    if _Character.current_character == '甘雨' and not mouse.isLongPressed('x2', 0.2):
-        _Character.special_mode['甘雨'] += 1
-        _Character.special_mode['甘雨'] %= 3
-        print('甘雨模式: {}'.format(_Character.special_mode['甘雨']))
+    if Character.current_character == '甘雨' and not mouse.isLongPressed('x2', 0.2):
+        Character.special_mode['甘雨'] += 1
+        Character.special_mode['甘雨'] %= 3
+        print('甘雨模式: {}'.format(Character.special_mode['甘雨']))
         return
 
-    if _Character.current_character == '胡桃' and not mouse.isLongPressed('x2', 0.2):
-        _Character.special_mode['胡桃'] += 1
-        _Character.special_mode['胡桃'] %= 2
-        print('胡桃模式: {}'.format(_Character.special_mode['胡桃']))
+    if Character.current_character == '胡桃' and not mouse.isLongPressed('x2', 0.2):
+        Character.special_mode['胡桃'] += 1
+        Character.special_mode['胡桃'] %= 2
+        print('胡桃模式: {}'.format(Character.special_mode['胡桃']))
         return
 
     do_while_pressed('mouse', 'x2', Macro.重复F)
@@ -172,7 +176,7 @@ def x1_thread():
     global _x1_pressed
     while True:
         try:
-            if gw.getActiveWindow().title == '原神':
+            if gw.getActiveWindow().title == Character.title:
                 do_while_pressed('mouse', 'x1', x1_callback)
         except AttributeError:
             pass
@@ -183,7 +187,7 @@ def x2_thread():
     global _x2_pressed
     while True:
         try:
-            if gw.getActiveWindow().title == '原神':
+            if gw.getActiveWindow().title == Character.title:
                 do_while_pressed('mouse', 'x2', x2_callback)
         except AttributeError:
             pass

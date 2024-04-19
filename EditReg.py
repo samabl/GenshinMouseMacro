@@ -37,4 +37,8 @@ def create_runasinvoker(path):
     else:
         create_value(key, path, winreg.REG_SZ, 'RUNASINVOKER')
 
-
+# lanuch_path = 'D:/Games/Genshin Impact/Genshin Impact Game/launcher.exe'
+# game_path = 'D:/Games/Genshin Impact/Genshin Impact Game/YuanShen.exe'
+# lanuch_path和game_path是游戏的启动器和游戏本体的路径
+# create_runasinvoker(lanuch_path)
+# create_runasinvoker(game_path)

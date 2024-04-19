@@ -111,3 +111,23 @@ def 甘雨(*args):
         time.sleep(0.01)
         mouse.click('right', 0.02)
         time.sleep(0.2)
+
+
+def 五郎(*args):
+    mouse.click('left', 0.01)
+    time.sleep(0.03)
+    keyboard.click('r', 0.01)
+    time.sleep(0.024)
+    keyboard.click('r', 0.01)
+    time.sleep(0.01)
+
+
+def 菲谢尔(*args):
+    mouse.click('left', 0.1)
+    time.sleep(0.2)
+    mouse.click('left', 0.1)
+    time.sleep(0.18)
+    keyboard.click('r', 0.1)
+    time.sleep(0.1)
+    keyboard.click('r', 0.05)
+    time.sleep(0.05)
